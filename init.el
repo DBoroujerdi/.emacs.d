@@ -280,6 +280,9 @@
 (use-package exec-path-from-shell
   :ensure t)
 
+;; default ansi-term binary
+(setq explicit-shell-file-name "/bin/zsh")
+
 ;; load path from shell
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
