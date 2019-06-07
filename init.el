@@ -289,10 +289,11 @@
 ;;
 
 ;; todo
-user-emacs-directory
+;; user-emacs-directory
 ;; (load "~/.emacs.d/init-functions")
 ;; (load "~/.emacs.d/init-keys")
 (load "~/.emacs.d/init-packages")
+(load "~/.emacs.d/init-javascript.el")
 (load "~/.emacs.d/init-keys.el")
 (load "~/.emacs.d/init-functions")
 (load "~/.emacs.d/init-lsp.el")
