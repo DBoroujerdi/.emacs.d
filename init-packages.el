@@ -296,17 +296,6 @@ _b_   _f_   _q_quit     _y_ank
 (use-package yaml-mode
   :ensure t)
 
-;; javascript
-
-
-;; (use-package indium
-;;   :ensure t
-;;   :after js2-mode
-;;   :bind (:map js2-mode-map
-;;               ("C-c C-l" . indium-eval-buffer))
-;;   :hook (((js2-mode typescript-mode) . indium-interaction-mode)))
-
-
 (use-package elixir-mode
   :defer t
   :ensure t

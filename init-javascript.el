@@ -12,25 +12,59 @@
   (defun setup-tide-mode ()
     (interactive)
     (tide-setup)
-    (flycheck-mode +1)
-    (setq flycheck-check-syntax-automatically '(save mode-enabled))
     (eldoc-mode +1)
     (tide-hl-identifier-mode +1)
     (company-mode +1))
-  :config
 
+  :config
   (general-define-key
    :keymaps 'tide-mode-map
    "C-c C-?" 'tide-references)
 
-  (add-hook 'before-save-hook 'editorconfig-apply))
+  ;; start with rjsx
+  (add-hook 'rjsx-mode-hook #'setup-tide-mode)
 
+  ;; (add-hook 'before-save-hook 'editorconfig-apply)
+  )
+
+(use-package flycheck
+  :ensure t
+  :init
+
+  ;; find eslint local the project and use that
+  (defun dboroujerdi/use-eslint-from-node-modules ()
+    (let* ((root (locate-dominating-file
+                  (or (buffer-file-name) default-directory)
+                  "node_modules"))
+           (eslint (and root
+                        (expand-file-name "node_modules/eslint/bin/eslint.js"
+                                          root))))
+      (when (and eslint (file-executable-p eslint))
+        (setq-local flycheck-javascript-eslint-executable eslint))))
+
+  :config
+  (global-flycheck-mode)
+
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+  ;; disable json-jsonlist checking for json files
+  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(json-jsonlist)))
+  ;; disable jshint since we prefer eslint checking
+  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
+  ;; use eslint with web-mode for jsx files
+  (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+  ;; when flycheck starts, find a local eslint executable and set that as the
+  ;; javascript linter
+  (add-hook 'flycheck-mode-hook #'dboroujerdi/use-eslint-from-node-modules))
 
 (use-package typescript-mode
   :ensure t
   :config
   (setq typescript-indent-level 2)
   (add-hook 'typescript-mode-hook #'setup-tide-mode))
+
+(use-package json-mode
+  :ensure t)
 
 (use-package editorconfig
   :ensure t
@@ -40,30 +74,37 @@
 (use-package jest
   :ensure t)
 
+;; required for rjsx-mode as that extends js2
 (use-package js2-mode
+  :ensure t)
+
+;; used in place of js2 until emacs 27 is released
+(use-package rjsx-mode
   :ensure t
-  :mode (("\\.js$" . js2-mode))
+  :mode (("\\.js$" . rjsx-mode))
+  :after (add-node-modules-path)
   :config
-  ;; have 2 space indentation by default
+  (setq js-indent-level 2
+        js-chain-indent t)
+
+  ;; refactoring hydra menu
   (general-define-key
    :prefix "C-x"
    "r" 'hydra-js2-refactor/body)
 
-  (setq js-indent-level 2
-        js2-basic-offset 2
-        js-chain-indent t)
   (electric-pair-mode 1)
-  (add-hook 'js2-mode-hook #'setup-tide-mode)
-  )
 
-
+  ;; these are required to turn off js2 mode linting as this
+  ;; interferes and prevents the javascript-eslint linter from
+  ;; being applied
+  (setq js2-mode-show-parse-errors nil)
+  (setq js2-mode-show-strict-warnings nil))
 
 (use-package js2-refactor
   :ensure t
   :config
-
   (add-hook 'tide-mode-hook #'js2-refactor-mode)
-  (add-hook 'js2-mode-hook #'js2-refactor-mode)
+  (add-hook 'rjsx-mode-hook #'js2-refactor-mode)
 
   (defhydra hydra-js2-refactor (:color blue :hint nil)
     "
@@ -113,18 +154,32 @@
 ;; or that finds the latest LTS
 (setq exec-path (append exec-path '("/usr/local/opt/node@10/bin")))
 
-(use-package nvm
+;; TODO move to misc file
+(use-package exec-path-from-shell
+  :ensure t
+  :custom
+  (exec-path-from-shell-check-startup-files nil)
+  :config
+  (push "HISTFILE" exec-path-from-shell-variables)
+  (exec-path-from-shell-initialize))
+
+
+;; Make sure the local node_modules/.bin/ can be found (for eslint)
+;; https://github.com/codesuki/add-node-modules-path
+(use-package add-node-modules-path
   :ensure t)
 
-(use-package rjsx-mode
+(use-package nvm
   :ensure t)
 
 (use-package prettier-js
   :ensure t
   :config
-  (add-hook 'js2-mode-hook 'prettier-js-mode)
   (add-hook 'web-mode-hook 'prettier-js-mode)
   (add-hook 'rjsx-mode-hook 'prettier-js-mode))
 
+(use-package graphql-mode
+  :ensure t
+  :mode "\\.gql$")
 
 (provide 'init-javascript)
