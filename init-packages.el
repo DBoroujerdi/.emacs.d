@@ -201,6 +201,12 @@ _b_   _f_   _q_quit     _y_ank
    "pf" '(counsel-git :whgich-key "find file in git dir")
    ))
 
+(use-package docker
+  :ensure t)
+
+(use-package dockerfile-mode
+  :ensure t)
+
 (use-package swiper
   :ensure t)
 
