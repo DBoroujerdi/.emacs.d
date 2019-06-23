@@ -7,7 +7,11 @@
  "S-C-<down>" 'shrink-window
  "S-C-<up>" 'enlarge-window)
 
-(global-set-key (kbd "M-j") 'avy-goto-char)
+(global-set-key (kbd "C-c j") 'avy-goto-char)
+
+;; commenting
+(global-set-key (kbd "C-x c") 'comment-region)
+(global-set-key (kbd "C-x x") 'uncomment-region)
 
 (provide 'init-keys)
 ;;; init-keys.el ends here
