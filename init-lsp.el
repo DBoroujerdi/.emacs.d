@@ -85,10 +85,6 @@
         company-lsp-cache-candidates 'auto
         company-lsp-enable-recompletion t))
 
-(use-package popup-imenu
-  :ensure t
-  :commands popup-imenu
-  :bind ("M-i" . popup-imenu))
 
 (provide 'init-lsp)
 ;;; init-lsp.el ends here
