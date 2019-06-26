@@ -1,7 +1,6 @@
 ;; Code:
 
 (use-package general
-  :ensure t
   :config
   (general-define-key
    ;; replace default keybindings
@@ -27,7 +26,6 @@
 ;; todo hydra for edebug so i can remember the key binding. must hook into expression execution
 
 (use-package which-key
-  :ensure t
   :diminish which-key-mode
   :config
   (which-key-mode)
@@ -41,7 +39,6 @@
     "C-c p" "project"))
 
 (use-package hydra
-  :ensure t
   :defer 2
   :config
 
@@ -139,12 +136,10 @@ _b_   _f_   _q_quit     _y_ank
   )
 
 (use-package ace-window
-  :ensure t
   :config
   (global-set-key (kbd "C-x o") 'ace-window))
 
 (use-package magit
-  :ensure t
   :config
   (general-define-key
    :prefix "C-c m"
@@ -156,16 +151,13 @@ _b_   _f_   _q_quit     _y_ank
    ))
 
 ;; (use-package auto-highlight-symbol
-;;   :ensure t
 ;;   :config
 ;;   (global-auto-highlight-symbol-mode 1))
 
 (use-package kubernetes
-  :ensure t
   :commands (kubernetes-overview))
 
 (use-package counsel
-  :ensure t
   :config
   (general-define-key
    ;; replace default keybindings
@@ -201,22 +193,17 @@ _b_   _f_   _q_quit     _y_ank
    "pf" '(counsel-git :whgich-key "find file in git dir")
    ))
 
-(use-package docker
-  :ensure t)
+(use-package docker)
 
-(use-package dockerfile-mode
-  :ensure t)
+(use-package dockerfile-mode)
 
-(use-package swiper
-  :ensure t)
+(use-package swiper)
 
 (use-package avy
-  :ensure t
   :commands (avy-goto-word-1) ; only load config when avy is first called.
   )
 
 (use-package multiple-cursors
-  :ensure t
   :config
   :bind (("C-S-e C-S-e" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
@@ -224,20 +211,17 @@ _b_   _f_   _q_quit     _y_ank
          ("S-<f6>" . mc/mark-all-like-this)))
 
 (use-package paredit
-  :ensure t
   :init (progn (add-hook 'clojure-mode-hook (lambda () (paredit-mode 1))))
   :config
   (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
   (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode))
 
 (use-package rainbow-mode
-  :ensure t
   :delight
   :config
   (add-hook 'prog-mode-hook #'rainbow-mode))
 
 (use-package projectile
-  :ensure t
   :delight '(:eval (concat " " (projectile-project-name)))
   :config
   (projectile-mode +1)
@@ -252,14 +236,12 @@ _b_   _f_   _q_quit     _y_ank
   )
 
 (use-package counsel-projectile
-  :ensure t
   :config
   (counsel-projectile-mode))
 
 (use-package eldoc :diminish eldoc-mode)
 
 (use-package company
-  :ensure t
   :defer t
   :init (global-company-mode)
   :config
@@ -284,27 +266,21 @@ _b_   _f_   _q_quit     _y_ank
 ;; todo icons in the company completion dropdown
 ;;
 ;; (use-package quelpa-use-package
-;;   :ensure t)
 
 ;; (use-package font-lock+
-;;   :ensure t
 ;;   :quelpa
 ;;   (font-lock+ :repo "emacsmirror/font-lock-plus" :fetcher github))
 
 ;; (use-package company-box
-;;   :ensure t
 ;;   :hook (company-mode . company-box-mode))
 
 (use-package rainbow-delimiters
-  :ensure t
   :delight)
 
-(use-package yaml-mode
-  :ensure t)
+(use-package yaml-mode)
 
 (use-package elixir-mode
   :defer t
-  :ensure t
   :init
   (add-hook 'elixir-mode-hook 'company-mode)
   (add-hook 'elixir-mode-hook 'lsp)
@@ -325,35 +301,32 @@ _b_   _f_   _q_quit     _y_ank
   )
 
 (use-package elixir-mode
-  :ensure t
   :config
   (add-hook 'elixir-mode-hook 'flycheck-mode))
 
 ;; (use-package lsp-elixir
-;;   :ensure t
 ;;   :config
 ;;   (add-hook 'elixir-mode-hook 'lsp))
 
 (use-package minions
-  :ensure t
   :config
   (minions-mode 1)
   (global-set-key [S-down-mouse-3] 'minions-minor-modes-menu))
 
 (use-package neotree
-  :ensure t
   :config
   (general-define-key
    :prefix "C-x"
    "n" 'neotree-toggle))
 
-(use-package all-the-icons
-  :ensure t)
+(use-package all-the-icons)
 
 (add-to-list 'load-path "~/.local/share/icons-in-terminal/")
 
-(use-package terraform-mode
-  :ensure t)
+(use-package terraform-mode)
+
+(use-package company-terraform
+  :config (company-terraform-init))
 
 
 (provide 'init-packages)

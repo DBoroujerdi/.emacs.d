@@ -43,6 +43,9 @@
   (message "`use-package' not found.  Installing...")
   (package-install 'use-package))
 
+;; so we don't have to add :ensure t to every use-package invocation
+(setq use-package-always-ensure t)
+
 ;; 2. Git-submodule - when you want to install a specific commit hash, maybe
 ;; due to a bug
 ;; (eval-when-compile
