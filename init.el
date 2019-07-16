@@ -84,9 +84,9 @@
 ;; (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
 
 ;; highlight entire expression
-(setq show-paren-style 'expression)
-(setq show-paren-when-point-inside-paren t)
-(setq show-paren-when-point-in-periphery t)
+;; (setq show-paren-style 'expression)
+;; (setq show-paren-when-point-inside-paren t)
+;; (setq show-paren-when-point-in-periphery t)
 
 (add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
 (add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
