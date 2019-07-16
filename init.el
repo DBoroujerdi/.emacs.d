@@ -287,6 +287,7 @@
 (load "~/.emacs.d/init-keys.el")
 (load "~/.emacs.d/init-functions")
 (load "~/.emacs.d/init-lsp.el")
+(load "~/.emacs.d/init-golang.el")
 
 ;; (use-package solarized-theme :ensure t)
 ;; (use-package arjen-grey-theme :ensure t)
