@@ -191,22 +191,6 @@
 
 (setq c-default-style "linux" c-basic-offset 8)
 
-;; for new frames and emacs client..
-;; (setq default-frame-alist '((font . "DejaVu Sans Mono")))
-
-(defun set-default-font-if-exists (font)
-  (if (x-list-fonts font)
-      (set-default-font font)
-    ))
-
-;; set font size
-(set-face-attribute 'default nil :height 120)
-
-(set-language-environment "UTF-8")
-(set-default-coding-systems 'utf-8)
-
-(when (window-system)
-  (set-default-font-if-exists "Fira Code"))
 
 ;; (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
 ;;                (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
@@ -307,11 +291,27 @@
 ;; (use-package solarized-theme :ensure t)
 ;; (use-package arjen-grey-theme :ensure t)
 ;; (use-package doom-themes :ensure t)
-;; (use-package spacemacs-theme
-;;   :ensure t
-;;   :defer t
-;;   :config
-;;   (load-theme 'spacemacs-dark 'no-confirm))
+(use-package spacemacs-theme
+  :ensure t
+  :defer t)
+
+(load-theme 'spacemacs-dark 'no-confirm)
+
+;; for new frames and emacs client..
+;; (setq default-frame-alist ((font . "DejaVu Sans Mono")))
+
+;; set default font
+(set-face-attribute 'default nil
+                    :family "Anonymous Pro"
+                    :height 140
+                    :weight 'normal
+                    :width 'normal)
+
+;; set modeline font
+(set-face-attribute 'mode-line nil :family "Anonymous Pro")
+
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
 
 
 ;; (load-theme 'doom-one t)
