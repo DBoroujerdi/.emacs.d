@@ -13,5 +13,7 @@
 (global-set-key (kbd "C-x c") 'comment-region)
 (global-set-key (kbd "C-x x") 'uncomment-region)
 
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
 (provide 'init-keys)
 ;;; init-keys.el ends here
