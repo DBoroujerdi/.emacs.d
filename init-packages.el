@@ -136,6 +136,13 @@ _b_   _f_   _q_quit     _y_ank
   (global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
   )
 
+
+(use-package flyspell-correct-ivy
+  :after flyspell
+  :bind (:map flyspell-mode-map
+        ("C-;" . flyspell-correct-word-generic))
+  :custom (flyspell-correct-interface 'flyspell-correct-ivy))
+
 (use-package ace-window
   :config
   (global-set-key (kbd "C-x o") 'ace-window))
