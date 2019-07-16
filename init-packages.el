@@ -318,7 +318,8 @@ _b_   _f_   _q_quit     _y_ank
   :config
   (general-define-key
    :prefix "C-x"
-   "n" 'neotree-toggle))
+   "n" 'neotree-toggle)
+  (setq-default neo-show-hidden-files t))
 
 (use-package all-the-icons)
 
