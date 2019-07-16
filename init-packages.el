@@ -325,7 +325,9 @@ _b_   _f_   _q_quit     _y_ank
 
 (add-to-list 'load-path "~/.local/share/icons-in-terminal/")
 
-(use-package terraform-mode)
+(use-package terraform-mode
+  :config
+  (add-hook 'terraform-mode-hook #'terraform-format-on-save-mode))
 
 (use-package company-terraform
   :config (company-terraform-init))
