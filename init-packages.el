@@ -332,6 +332,10 @@ _b_   _f_   _q_quit     _y_ank
 (use-package company-terraform
   :config (company-terraform-init))
 
+(use-package eyebrowse
+  :config
+  (eyebrowse-mode t))
+
 (use-package yasnippet
   :config
   (yas-global-mode 1)
