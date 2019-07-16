@@ -45,6 +45,14 @@
   :config
   (global-flycheck-mode)
 
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*Flycheck errors*" eos)
+                 (display-buffer-reuse-window
+                  display-buffer-in-side-window)
+                 (side            . bottom)
+                 (reusable-frames . visible)
+                 (window-height   . 0.15)))
+
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
   ;; disable json-jsonlist checking for json files
   (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(json-jsonlist)))
@@ -182,4 +190,8 @@
   :ensure t
   :mode "\\.gql$")
 
+(use-package web-mode
+  :mode "\\.ejs\\'")
+
 (provide 'init-javascript)
+;;; init-javascript.el ends here
