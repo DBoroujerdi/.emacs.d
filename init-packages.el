@@ -17,6 +17,7 @@
    :prefix "C-c"
    ;; bind to simple key press
    "b" 'ivy-switch-buffer  ; change buffer, chose using ivy
+   "y" 'ivy-yasnippet
    )
   )
 
@@ -328,6 +329,17 @@ _b_   _f_   _q_quit     _y_ank
 (use-package company-terraform
   :config (company-terraform-init))
 
+(use-package yasnippet
+  :config
+  (yas-global-mode 1)
+  (add-to-list 'load-path "~/.emacs.d/es6-snippets")
+  (setq yas-snippet-dirs
+        '("~/.emacs.d/snippet"
+          "~/.emacs.d/es6-snippets/snippets"))
+  (yas-reload-all)
+  )
+
+(use-package ivy-yasnippet)
 
 (provide 'init-packages)
 ;;; init-packages.el ends here

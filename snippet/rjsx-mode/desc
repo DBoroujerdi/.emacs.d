@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: es6#describeJestBlock
+# key: desc
+# --
+describe('$1', () => {
+  $0
+});

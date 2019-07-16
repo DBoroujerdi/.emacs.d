@@ -1,0 +1,3 @@
+[submodule "es6-snippets"]
+	path = es6-snippets
+	url = git@github.com:codyreichert/es6-snippets
