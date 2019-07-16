@@ -77,9 +77,9 @@
 ;; todo move lisp config somewhere else.. it requires packages installed for these hooks to work.
 ;; elisp config
 ;; Recompile if .elc exists.
-(add-hook (make-local-variable 'after-save-hook)
-          (lambda ()
-            (byte-force-recompile default-directory)))
+;; (add-hook (make-local-variable 'after-save-hook)
+;;           (lambda ()
+;;             (byte-force-recompile default-directory)))
 ;; (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
 ;; (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
 
