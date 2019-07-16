@@ -1,12 +1,11 @@
 
 (use-package lsp-mode
-  :ensure t
   :commands lsp
   :config
   (setq lsp-prefer-flymake nil))
 
 (use-package lsp-ui
-  :ensure t
+  :commands lsp-ui-mode
   :config
   (setq lsp-ui-flycheck-enable t)
   (setq lsp-ui-sideline-ignore-duplicate t)
@@ -73,12 +72,11 @@
 
 (use-package company-quickhelp
   :after (company)
-  :ensure t
   :config
   (company-quickhelp-mode))
 
 (use-package company-lsp
-  :ensure t
+  :commands company-lsp
   :config
   (push 'company-lsp company-backends)
   (setq company-lsp-async t
