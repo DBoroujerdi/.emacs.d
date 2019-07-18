@@ -355,5 +355,11 @@ _b_   _f_   _q_quit     _y_ank
 
 (use-package ivy-yasnippet)
 
+(use-package multiple-cursors
+  :bind (("C-S-e C-S-e" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("S-<f6>" . mc/mark-all-like-this)))
+
 (provide 'init-packages)
 ;;; init-packages.el ends here
