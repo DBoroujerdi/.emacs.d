@@ -158,6 +158,10 @@ _b_   _f_   _q_quit     _y_ank
    "b" '(magit-blame :which-key "blame")
    ))
 
+(use-package diff-hl
+  :config
+  (global-diff-hl-mode))
+
 ;; (use-package auto-highlight-symbol
 ;;   :config
 ;;   (global-auto-highlight-symbol-mode 1))
