@@ -15,5 +15,7 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+(global-set-key "\C-c\C-d" "\C-a\C- \C-n\M-w\C-y")
+
 (provide 'init-keys)
 ;;; init-keys.el ends here
