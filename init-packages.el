@@ -365,5 +365,6 @@ _b_   _f_   _q_quit     _y_ank
          ("C-<" . mc/mark-previous-like-this)
          ("S-<f6>" . mc/mark-all-like-this)))
 
+(use-package iedit)
 (provide 'init-packages)
 ;;; init-packages.el ends here
