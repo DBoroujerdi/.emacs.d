@@ -366,5 +366,10 @@ _b_   _f_   _q_quit     _y_ank
          ("S-<f6>" . mc/mark-all-like-this)))
 
 (use-package iedit)
+
+(use-package emojify
+  :config
+  (add-hook 'after-init-hook #'global-emojify-mode)
+  (emojify-download-emoji-maybe))
 (provide 'init-packages)
 ;;; init-packages.el ends here
