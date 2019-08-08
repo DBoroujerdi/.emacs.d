@@ -330,7 +330,8 @@ _b_   _f_   _q_quit     _y_ank
   (general-define-key
    :prefix "C-x"
    "n" 'neotree-toggle)
-  (setq-default neo-show-hidden-files t))
+  (setq-default neo-show-hidden-files t)
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
 (use-package all-the-icons)
 
@@ -371,5 +372,8 @@ _b_   _f_   _q_quit     _y_ank
   :config
   (add-hook 'after-init-hook #'global-emojify-mode)
   (emojify-download-emoji-maybe))
+
+(use-package all-the-icons)
+
 (provide 'init-packages)
 ;;; init-packages.el ends here
