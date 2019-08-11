@@ -1,3 +1,6 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 
 ;;
 ;; Bootstrap package management
@@ -283,10 +286,11 @@
 ;; (load "~/.emacs.d/init-functions")
 ;; (load "~/.emacs.d/init-keys")
 (load "~/.emacs.d/init-packages")
+(load "~/.emacs.d/init-programming.el")
 (load "~/.emacs.d/init-javascript.el")
+(load "~/.emacs.d/init-typescript.el")
 (load "~/.emacs.d/init-keys.el")
 (load "~/.emacs.d/init-functions")
-(load "~/.emacs.d/init-lsp.el")
 (load "~/.emacs.d/init-golang.el")
 
 ;; (use-package solarized-theme :ensure t)
@@ -296,7 +300,7 @@
   :ensure t
   :defer t)
 
-(load-theme 'spacemacs-dark 'no-confirm)
+;; (load-theme 'spacemacs-dark 'no-confirm)
 
 ;; for new frames and emacs client..
 ;; (setq default-frame-alist ((font . "DejaVu Sans Mono")))

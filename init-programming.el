@@ -1,24 +1,9 @@
-
-(use-package lsp-mode
-  :commands lsp
-  :config
-  (setq lsp-prefer-flymake nil))
-
-(use-package lsp-ui
-  :commands lsp-ui-mode
-  :config
-  (setq lsp-ui-flycheck-enable t)
-  (setq lsp-ui-sideline-ignore-duplicate t)
-
-  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  )
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 
 (use-package flycheck
-  :ensure t
   :init
-  (global-flycheck-mode)
-
   (define-fringe-bitmap 'my-flycheck-fringe-indicator
     (vector #b00000000
             #b00000000
@@ -56,7 +41,34 @@
     :fringe-bitmap 'my-flycheck-fringe-indicator
     :fringe-face 'flycheck-fringe-info)
 
+
+  :hook ((typescript-mode . flycheck-mode)
+         (rjsx-mode . flycheck-mode)
+         (elisp-mode . flycheck-mode))
+
   :config
+  ;; auto flycheck on buffer save
+  (setq flycheck-check-syntax-automatically '(save mode-enabled))
+
+  (flycheck-add-mode 'typescript-tslint 'typescript-mode)
+
+  (flycheck-valid-checker-p 'typescript-tslint)
+  (flycheck-add-mode 'javascript-eslint 'rjsx-mode)
+
+  ;; disable json-jsonlist checking for json files
+  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(json-jsonlist)))
+  ;; disable jshint since we prefer eslint checking
+  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
+
+  ;; configure size and format of error buffer
+  (add-to-list 'display-buffer-alist
+               `(,(rx bos "*Flycheck errors*" eos)
+                 (display-buffer-reuse-window
+                  display-buffer-in-side-window)
+                 (side            . bottom)
+                 (reusable-frames . visible)
+                 (window-height   . 0.15)))
+
   (defhydra hydra-flycheck
     (:pre (progn (setq hydra-lv t) (flycheck-list-errors))
           :post (progn (setq hydra-lv nil) (quit-windows-on "*Flycheck errors*"))
@@ -69,6 +81,27 @@
     ("G"  (progn (goto-char (point-max)) (flycheck-previous-error)) "Last")
     ("q"  nil)))
 
+(use-package lsp-mode
+  :commands lsp
+  :hook (typescript-mode . lsp)
+  :config
+  (setq lsp-prefer-flymake nil))
+
+(use-package lsp-ui
+  :commands lsp-ui-mode
+  :config
+
+  ;; ensures typescript built-in linter is run after lsp-ui linter
+  ;; in the same buffer. the typescript-language-server does no provide linting
+  ;; but is still aggressively loaded by lsp-mode
+  (flycheck-add-next-checker 'lsp-ui 'typescript-tslint)
+
+  ;; (setq lsp-ui-flycheck-enable t)
+  (setq lsp-ui-sideline-enable nil)
+  (setq lsp-ui-sideline-ignore-duplicate t)
+
+  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
+  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references))
 
 (use-package company-quickhelp
   :after (company)
@@ -83,6 +116,10 @@
         company-lsp-cache-candidates 'auto
         company-lsp-enable-recompletion t))
 
+(use-package dap-mode
+  :config
+  (dap-mode 1)
+  (dap-ui-mode 1))
 
-(provide 'init-lsp)
-;;; init-lsp.el ends here
+(provide 'init-programming)
+;;; init-programming.el ends here

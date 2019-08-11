@@ -1,13 +1,14 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 
-
-;; keys
 
 (general-define-key
  :prefix "C-c j"
  "t" 'jest-popup)
 
 (use-package tide
-  :ensure t
+  :hook (before-save . tide-format-before-save)
   :init
   (defun setup-tide-mode ()
     (interactive)
@@ -27,68 +28,19 @@
   ;; (add-hook 'before-save-hook 'editorconfig-apply)
   )
 
-(use-package flycheck
-  :ensure t
-  :init
-
-  ;; find eslint local the project and use that
-  (defun dboroujerdi/use-eslint-from-node-modules ()
-    (let* ((root (locate-dominating-file
-                  (or (buffer-file-name) default-directory)
-                  "node_modules"))
-           (eslint (and root
-                        (expand-file-name "node_modules/eslint/bin/eslint.js"
-                                          root))))
-      (when (and eslint (file-executable-p eslint))
-        (setq-local flycheck-javascript-eslint-executable eslint))))
-
-  :config
-  (global-flycheck-mode)
-
-  (add-to-list 'display-buffer-alist
-               `(,(rx bos "*Flycheck errors*" eos)
-                 (display-buffer-reuse-window
-                  display-buffer-in-side-window)
-                 (side            . bottom)
-                 (reusable-frames . visible)
-                 (window-height   . 0.15)))
-
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  ;; disable json-jsonlist checking for json files
-  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(json-jsonlist)))
-  ;; disable jshint since we prefer eslint checking
-  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
-  ;; use eslint with web-mode for jsx files
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-
-  ;; when flycheck starts, find a local eslint executable and set that as the
-  ;; javascript linter
-  (add-hook 'flycheck-mode-hook #'dboroujerdi/use-eslint-from-node-modules))
-
-(use-package typescript-mode
-  :ensure t
-  :config
-  (setq typescript-indent-level 2)
-  (add-hook 'typescript-mode-hook #'setup-tide-mode))
-
-(use-package json-mode
-  :ensure t)
+(use-package json-mode)
 
 (use-package editorconfig
-  :ensure t
   :config
   (editorconfig-mode 1))
 
-(use-package jest
-  :ensure t)
+(use-package jest)
 
 ;; required for rjsx-mode as that extends js2
-(use-package js2-mode
-  :ensure t)
+(use-package js2-mode)
 
 ;; used in place of js2 until emacs 27 is released
 (use-package rjsx-mode
-  :ensure t
   :mode (("\\.js$" . rjsx-mode))
   :after (add-node-modules-path)
   :config
@@ -164,7 +116,6 @@
 
 ;; TODO move to misc file
 (use-package exec-path-from-shell
-  :ensure t
   :custom
   (exec-path-from-shell-check-startup-files nil)
   :config
@@ -174,20 +125,16 @@
 
 ;; Make sure the local node_modules/.bin/ can be found (for eslint)
 ;; https://github.com/codesuki/add-node-modules-path
-(use-package add-node-modules-path
-  :ensure t)
+(use-package add-node-modules-path)
 
-(use-package nvm
-  :ensure t)
+(use-package nvm)
 
 (use-package prettier-js
-  :ensure t
   :config
   (add-hook 'web-mode-hook 'prettier-js-mode)
   (add-hook 'rjsx-mode-hook 'prettier-js-mode))
 
 (use-package graphql-mode
-  :ensure t
   :mode "\\.gql$")
 
 (use-package web-mode
