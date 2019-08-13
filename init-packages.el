@@ -139,11 +139,15 @@ _b_   _f_   _q_quit     _y_ank
   )
 
 
-(use-package flyspell-correct-ivy
-  :after flyspell
-  :bind (:map flyspell-mode-map
-        ("C-;" . flyspell-correct-word-generic))
-  :custom (flyspell-correct-interface 'flyspell-correct-ivy))
+;; (use-package flyspell-correct-ivy
+;;   :after flyspell
+;;   :bind (:map flyspell-mode-map
+;;         ("C-c ;" . flyspell-correct-word-generic))
+;;   :custom (flyspell-correct-interface 'flyspell-correct-ivy))
+
+;; aggresively disable flyspell by redifining the function
+(eval-after-load "flyspell"
+  '(defun flyspell-mode (&optional arg)))
 
 (use-package ace-window
   :config
