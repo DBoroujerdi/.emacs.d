@@ -1,3 +1,6 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 
 ;;resizing windows
 (global-set-key (kbd "S-C-<left>")  'shrink-window-horizontally)
@@ -19,3 +22,4 @@
   ("k" 'enlarge-window))
 
 (provide 'init-hydras)
+;;; init-hydras.el ends here

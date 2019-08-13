@@ -1,7 +1,11 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
+
 (defun json-flatten-print ()
   (interactive)
   (unless mark-active
-    (error "No region selected."))
+    (error "No region selected"))
   (let ((begin (region-beginning))
         (end (region-end)))
     (kill-region begin end)
@@ -12,3 +16,4 @@
 
 
 (provide 'init-functions)
+;;; init-functions.el ends here

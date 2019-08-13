@@ -1,4 +1,6 @@
-;; Code:
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 
 (use-package general
   :config
