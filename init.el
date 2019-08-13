@@ -277,6 +277,8 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
+(exec-path-from-shell-copy-envs '("NPM_TOKEN"))
+
 ;;
 ;; Load other modules
 ;;
