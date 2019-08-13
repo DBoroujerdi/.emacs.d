@@ -379,5 +379,6 @@ _b_   _f_   _q_quit     _y_ank
 
 (use-package all-the-icons)
 
+(use-package vterm)
 (provide 'init-packages)
 ;;; init-packages.el ends here
