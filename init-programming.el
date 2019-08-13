@@ -50,6 +50,8 @@
   ;; auto flycheck on buffer save
   (setq flycheck-check-syntax-automatically '(save mode-enabled))
 
+  (setq flycheck-temp-prefix ".flycheck")
+
   (flycheck-add-mode 'typescript-tslint 'typescript-mode)
 
   (flycheck-valid-checker-p 'typescript-tslint)

@@ -332,7 +332,9 @@ _b_   _f_   _q_quit     _y_ank
   (general-define-key
    :prefix "C-x"
    "n" 'neotree-toggle)
-  (setq-default neo-show-hidden-files t)
+
+  (setq neo-hidden-regexp-list '("^\\.flycheck" "~$" "^#.*#$" "\\.elc$" "\\.o$"))
+  (setq-default neo-show-hidden-files nil)
   (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
 (use-package all-the-icons)
