@@ -24,7 +24,6 @@
 
   ;; start with rjsx
   (add-hook 'rjsx-mode-hook #'setup-tide-mode)
-
   ;; (add-hook 'before-save-hook 'editorconfig-apply)
   )
 
