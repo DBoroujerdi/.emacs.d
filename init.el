@@ -114,6 +114,10 @@
 ;; prefer spaces over tabs
 (setq-default indent-tabs-mode nil)
 
+;; reload TAGS file automatically
+;; stops that annoying popup dialogue box
+(setq tags-revert-without-query 1)
+
 ;; typed text replaces selected
 (delete-selection-mode 1)
 
