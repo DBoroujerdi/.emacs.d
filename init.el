@@ -316,8 +316,8 @@
 
 ;; set default font
 (set-face-attribute 'default nil
-                    :family "Anonymous Pro"
-                    :height 140
+                    :family "InputMono"
+                    :height 110
                     :weight 'normal
                     :width 'normal)
 
@@ -328,7 +328,7 @@
 (set-default-coding-systems 'utf-8)
 
 
-;; (load-theme 'doom-one t)
+(load-theme 'monokai-pro t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
