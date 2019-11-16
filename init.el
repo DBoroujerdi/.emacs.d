@@ -327,8 +327,10 @@
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 
+(use-package monokai-pro-theme
+  :config
+  (load-theme 'monokai-pro t))
 
-(load-theme 'monokai-pro t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
