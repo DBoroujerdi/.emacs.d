@@ -265,6 +265,9 @@
 ;; toggle wrapping text at the 80th character
 (setq default-fill-column 80)
 
+;; quick fix to get around the exceeding max-lisp-eval-depth errors
+(setq max-lisp-eval-depth 10000)
+
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda ()
                    (flyspell-mode 1)
