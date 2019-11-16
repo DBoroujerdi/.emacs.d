@@ -316,8 +316,8 @@
 
 ;; set default font
 (set-face-attribute 'default nil
-                    :family "InputMono"
-                    :height 110
+                    :family "Input Mono"
+                    :height 120
                     :weight 'normal
                     :width 'normal)
 
