@@ -3,6 +3,8 @@
 ;; Bootstrap package management
 ;;
 
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (require 'package)
 
 (setq package-archives
@@ -74,31 +76,6 @@
 ;; Config
 ;;
 
-;; todo move lisp config somewhere else.. it requires packages installed for these hooks to work.
-;; elisp config
-;; Recompile if .elc exists.
-;; (add-hook (make-local-variable 'after-save-hook)
-;;           (lambda ()
-;;             (byte-force-recompile default-directory)))
-;; (add-hook 'emacs-lisp-mode-hook 'eldoc-mode)
-;; (add-hook 'emacs-lisp-mode-hook 'flyspell-prog-mode) ;; Requires Ispell
-
-;; highlight entire expression
-;; (setq show-paren-style 'expression)
-;; (setq show-paren-when-point-inside-paren t)
-;; (setq show-paren-when-point-in-periphery t)
-
-(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode)
-(add-hook 'emacs-lisp-mode-hook 'show-paren-mode)
-;; (add-hook 'emacs-lisp-mode-hook 'flycheck-mode)
-;; (add-hook 'emacs-lisp-mode-hook 'autopair-mode)
-;; (add-hook 'emacs-lisp-mode-hook '(lambda()
-;;                                   (setq indent-tabs-mode nil)
-;;                                   ;; (define-key flyspell-mode-map "\M-\t" nil)
-;;                                   (define-key emacs-lisp-mode-map "\r" 'reindent-then-newline-and-indent)
-;;                                   (define-key emacs-lisp-mode-map "\C-x\C-e" 'pp-eval-last-sexp)
-;;                                   ))
-
 ;; automatically load buffer when file changes outside of emacs
 (global-auto-revert-mode t)
 
@@ -153,14 +130,6 @@
 ;; (setq linum-format "%d ")
 ;; (global-linum-mode t)
 
-;; window size
-;; (setq initial-frame-alist '((top . 0) (left . 0) (width . 300) (height . 80)))
-;; new window sizes
-;; (setq default-frame-alist '((top . 0) (left . 0) (width . 300) (height . 80)))
-;; width  -> num characters
-;; height -> num lines
-
-
 (if (display-graphic-p)
     (progn
       (setq initial-frame-alist
@@ -191,36 +160,10 @@
 
 (setq c-default-style "linux" c-basic-offset 8)
 
+(setq delete-old-versions -1)
 
-;; (let ((alist '((33 . ".\\(?:\\(?:==\\|!!\\)\\|[!=]\\)")
-;;                (35 . ".\\(?:###\\|##\\|_(\\|[#(?[_{]\\)")
-;;                (36 . ".\\(?:>\\)")
-;;                (37 . ".\\(?:\\(?:%%\\)\\|%\\)")
-;;                (38 . ".\\(?:\\(?:&&\\)\\|&\\)")
-;;                (42 . ".\\(?:\\(?:\\*\\*/\\)\\|\\(?:\\*[*/]\\)\\|[*/>]\\)")
-;;                (43 . ".\\(?:\\(?:\\+\\+\\)\\|[+>]\\)")
-;;                (45 . ".\\(?:\\(?:-[>-]\\|<<\\|>>\\)\\|[<>}~-]\\)")
-;;                (46 . ".\\(?:\\(?:\\.[.<]\\)\\|[.=-]\\)")
-;;                (47 . ".\\(?:\\(?:\\*\\*\\|//\\|==\\)\\|[*/=>]\\)")
-;;                (48 . ".\\(?:x[a-zA-Z]\\)")
-;;                (58 . ".\\(?:::\\|[:=]\\)")
-;;                (59 . ".\\(?:;;\\|;\\)")
-;;                (60 . ".\\(?:\\(?:!--\\)\\|\\(?:~~\\|->\\|\\$>\\|\\*>\\|\\+>\\|--\\|<[<=-]\\|=[<=>]\\||>\\)\\|[*$+~/<=>|-]\\)")
-;;                (61 . ".\\(?:\\(?:/=\\|:=\\|<<\\|=[=>]\\|>>\\)\\|[<=>~]\\)")
-;;                (62 . ".\\(?:\\(?:=>\\|>[=>-]\\)\\|[=>-]\\)")
-;;                (63 . ".\\(?:\\(\\?\\?\\)\\|[:=?]\\)")
-;;                (91 . ".\\(?:]\\)")
-;;                (92 . ".\\(?:\\(?:\\\\\\\\\\)\\|\\\\\\)")
-;;                (94 . ".\\(?:=\\)")
-;;                (119 . ".\\(?:ww\\)")
-;;                (123 . ".\\(?:-\\)")
-;;                (124 . ".\\(?:\\(?:|[=|]\\)\\|[=>|]\\)")
-;;                (126 . ".\\(?:~>\\|~~\\|[>=@~-]\\)")
-;;                )
-;;              ))
-;;   (dolist (char-regexp alist)
-;;     (set-char-table-range composition-function-table (car char-regexp)
-;;                           `([,(cdr char-regexp) 0 font-shape-gstring]))))
+(setq coding-system-for-read 'utf-8)
+(setq coding-system-for-write 'utf-8)
 
 ;; delete trailing whitespace on save action
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
@@ -280,36 +223,32 @@
 
 ;; todo
 ;; user-emacs-directory
-;; (load "~/.emacs.d/init-functions")
-;; (load "~/.emacs.d/init-keys")
 (load "~/.emacs.d/init-packages")
-(load "~/.emacs.d/init-javascript.el")
+(load "~/.emacs.d/init-lisp")
 (load "~/.emacs.d/init-keys.el")
 (load "~/.emacs.d/init-functions")
-(load "~/.emacs.d/init-lsp.el")
-(load "~/.emacs.d/init-golang.el")
+;; (load "~/.emacs.d/init-javascript.el")
+;; (load "~/.emacs.d/init-lsp.el")
+;; (load "~/.emacs.d/init-golang.el")
 
-;; (use-package solarized-theme :ensure t)
-;; (use-package arjen-grey-theme :ensure t)
-;; (use-package doom-themes :ensure t)
 (use-package spacemacs-theme
-  :ensure t
-  :defer t)
+ :ensure t
+ :defer t)
 
-(load-theme 'spacemacs-dark 'no-confirm)
+(load-theme 'spacemacs-light 'no-confirm)
 
 ;; for new frames and emacs client..
-;; (setq default-frame-alist ((font . "DejaVu Sans Mono")))
+;; (setq default-frame-alist ((font . "Inconsolata")))
 
 ;; set default font
 (set-face-attribute 'default nil
-                    :family "Anonymous Pro"
-                    :height 140
-                    :weight 'normal
-                    :width 'normal)
+                     :family "Inconsolata"
+                     :height 140
+                     :weight 'normal
+                     :width 'normal)
 
 ;; set modeline font
-(set-face-attribute 'mode-line nil :family "Anonymous Pro")
+(set-face-attribute 'mode-line nil :family "Inconsolata")
 
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
@@ -323,7 +262,8 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" default))))
+    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "4a61dd8fd1fd94f118e43314abbd86873868a12c5f5d73de9f8558d0d2b33c46" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" default)))
+ '(exec-path-from-shell-check-startup-files nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

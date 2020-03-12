@@ -16,6 +16,8 @@
   (general-define-key
    :prefix "C-c"
    ;; bind to simple key press
+   "d" 'deer
+   "r" 'ranger
    "b" 'ivy-switch-buffer  ; change buffer, chose using ivy
    "y" 'ivy-yasnippet
    )
@@ -38,6 +40,10 @@
     "C-c ff" "find file"
     "C-c fr" "recently edited"
     "C-c p" "project"))
+
+(use-package ranger
+  :config
+  (setq ranger-show-hidden t))
 
 (use-package hydra
   :defer 2
@@ -203,6 +209,7 @@ _b_   _f_   _q_quit     _y_ank
    "ff" 'counsel-find-file  ; find file using ivy
    "fr"	'counsel-recentf    ; find recently edited files
    "pf" '(counsel-git :whgich-key "find file in git dir")
+   "ip" 'counsel-package
    ))
 
 (use-package docker)
@@ -215,18 +222,30 @@ _b_   _f_   _q_quit     _y_ank
   :commands (avy-goto-word-1) ; only load config when avy is first called.
   )
 
+(use-package ivy
+  :config
+
+  ;; Disable ido
+  (with-eval-after-load 'ido
+    (ido-mode -1)
+    ;; Enable ivy
+    (ivy-mode 1))
+  (setq ivy-count-format "(%d/%d) ")
+
+  ;; use fuzzy matching everywhere except for swiper
+  (setq ivy-re-builders-alist
+      '((swiper . ivy--regex-plus)
+        (t      . ivy--regex-fuzzy))))
+
+(use-package ivy-rich
+  :config (ivy-rich-mode 1))
+
 (use-package multiple-cursors
   :config
   :bind (("C-S-e C-S-e" . mc/edit-lines)
          ("C->" . mc/mark-next-like-this)
          ("C-<" . mc/mark-previous-like-this)
          ("S-<f6>" . mc/mark-all-like-this)))
-
-(use-package paredit
-  :init (progn (add-hook 'clojure-mode-hook (lambda () (paredit-mode 1))))
-  :config
-  (add-hook 'emacs-lisp-mode-hook #'paredit-mode)
-  (add-hook 'eval-expression-minibuffer-setup-hook #'paredit-mode))
 
 (use-package rainbow-mode
   :delight
@@ -320,10 +339,10 @@ _b_   _f_   _q_quit     _y_ank
 ;;   :config
 ;;   (add-hook 'elixir-mode-hook 'lsp))
 
-(use-package minions
-  :config
-  (minions-mode 1)
-  (global-set-key [S-down-mouse-3] 'minions-minor-modes-menu))
+;; (use-package minions
+;;   :config
+;;   (minions-mode 1)
+;;   (global-set-key [S-down-mouse-3] 'minions-minor-modes-menu))
 
 (use-package neotree
   :config
