@@ -1,13 +1,14 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 
-
-;; keys
 
 (general-define-key
  :prefix "C-c j"
  "t" 'jest-popup)
 
 (use-package tide
-  :ensure t
+  :hook (before-save . tide-format-before-save)
   :init
   (defun setup-tide-mode ()
     (interactive)
@@ -23,72 +24,22 @@
 
   ;; start with rjsx
   (add-hook 'rjsx-mode-hook #'setup-tide-mode)
-
   ;; (add-hook 'before-save-hook 'editorconfig-apply)
   )
 
-(use-package flycheck
-  :ensure t
-  :init
-
-  ;; find eslint local the project and use that
-  (defun dboroujerdi/use-eslint-from-node-modules ()
-    (let* ((root (locate-dominating-file
-                  (or (buffer-file-name) default-directory)
-                  "node_modules"))
-           (eslint (and root
-                        (expand-file-name "node_modules/eslint/bin/eslint.js"
-                                          root))))
-      (when (and eslint (file-executable-p eslint))
-        (setq-local flycheck-javascript-eslint-executable eslint))))
-
-  :config
-  (global-flycheck-mode)
-
-  (add-to-list 'display-buffer-alist
-               `(,(rx bos "*Flycheck errors*" eos)
-                 (display-buffer-reuse-window
-                  display-buffer-in-side-window)
-                 (side            . bottom)
-                 (reusable-frames . visible)
-                 (window-height   . 0.15)))
-
-  (setq flycheck-check-syntax-automatically '(save mode-enabled))
-  ;; disable json-jsonlist checking for json files
-  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(json-jsonlist)))
-  ;; disable jshint since we prefer eslint checking
-  (setq-default flycheck-disabled-checkers (append flycheck-disabled-checkers '(javascript-jshint)))
-  ;; use eslint with web-mode for jsx files
-  (flycheck-add-mode 'javascript-eslint 'web-mode)
-
-  ;; when flycheck starts, find a local eslint executable and set that as the
-  ;; javascript linter
-  (add-hook 'flycheck-mode-hook #'dboroujerdi/use-eslint-from-node-modules))
-
-(use-package typescript-mode
-  :ensure t
-  :config
-  (setq typescript-indent-level 2)
-  (add-hook 'typescript-mode-hook #'setup-tide-mode))
-
-(use-package json-mode
-  :ensure t)
+(use-package json-mode)
 
 (use-package editorconfig
-  :ensure t
   :config
   (editorconfig-mode 1))
 
-(use-package jest
-  :ensure t)
+(use-package jest)
 
 ;; required for rjsx-mode as that extends js2
-(use-package js2-mode
-  :ensure t)
+(use-package js2-mode)
 
 ;; used in place of js2 until emacs 27 is released
 (use-package rjsx-mode
-  :ensure t
   :mode (("\\.js$" . rjsx-mode))
   :after (add-node-modules-path)
   :config
@@ -112,50 +63,7 @@
   :ensure t
   :config
   (add-hook 'tide-mode-hook #'js2-refactor-mode)
-  (add-hook 'rjsx-mode-hook #'js2-refactor-mode)
-
-  (defhydra hydra-js2-refactor (:color blue :hint nil)
-    "
-^Functions^                    ^Variables^               ^Buffer^                      ^sexp^               ^Debugging^
-------------------------------------------------------------------------------------------------------------------------------
-[_lp_] Localize Parameter      [_ev_] Extract variable   [_wi_] Wrap buffer in IIFE    [_k_]  js2 kill      [_lt_] log this
-[_ef_] Extract function        [_iv_] Inline variable    [_ig_] Inject global in IIFE  [_ss_] split string  [_dt_] debug this
-[_ip_] Introduce parameter     [_rv_] Rename variable    [_ee_] Expand node at point   [_sl_] forward slurp
-[_em_] Extract method          [_vt_] Var to this        [_cc_] Contract node at point [_ba_] forward barf
-[_ao_] Arguments to object     [_sv_] Split var decl.    [_uw_] unwrap
-[_tf_] Toggle fun exp and decl [_ag_] Add var to globals
-[_ta_] Toggle fun expr and =>  [_ti_] Ternary to if
-[_q_]  quit"
-    ("ee" js2r-expand-node-at-point)
-    ("cc" js2r-contract-node-at-point)
-    ("ef" js2r-extract-function)
-    ("em" js2r-extract-method)
-    ("tf" js2r-toggle-function-expression-and-declaration)
-    ("ta" js2r-toggle-arrow-function-and-expression)
-    ("ip" js2r-introduce-parameter)
-    ("lp" js2r-localize-parameter)
-    ("wi" js2r-wrap-buffer-in-iife)
-    ("ig" js2r-inject-global-in-iife)
-    ("ag" js2r-add-to-globals-annotation)
-    ("ev" js2r-extract-var)
-    ("iv" js2r-inline-var)
-    ("rv" js2r-rename-var)
-    ("vt" js2r-var-to-this)
-    ("ao" js2r-arguments-to-object)
-    ("ti" js2r-ternary-to-if)
-    ("sv" js2r-split-var-declaration)
-    ("ss" js2r-split-string)
-    ("uw" js2r-unwrap)
-    ("lt" js2r-log-this)
-    ("dt" js2r-debug-this)
-    ("sl" js2r-forward-slurp)
-    ("ba" js2r-forward-barf)
-    ("k" js2r-kill)
-    ("q" nil)
-    )
-
-  (global-set-key (kbd "C-x jr") 'hydra-js2-refactor/body)
-  )
+  (add-hook 'rjsx-mode-hook #'js2-refactor-mode))
 
 ;; todo write function that can switch this..
 ;; or that find the newest version
@@ -164,7 +72,6 @@
 
 ;; TODO move to misc file
 (use-package exec-path-from-shell
-  :ensure t
   :custom
   (exec-path-from-shell-check-startup-files nil)
   :config
@@ -174,20 +81,17 @@
 
 ;; Make sure the local node_modules/.bin/ can be found (for eslint)
 ;; https://github.com/codesuki/add-node-modules-path
-(use-package add-node-modules-path
-  :ensure t)
+(use-package add-node-modules-path)
 
-(use-package nvm
-  :ensure t)
+(use-package nvm)
 
 (use-package prettier-js
-  :ensure t
   :config
   (add-hook 'web-mode-hook 'prettier-js-mode)
-  (add-hook 'rjsx-mode-hook 'prettier-js-mode))
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  (add-hook 'typescript-mode-hook 'prettier-js-mode))
 
 (use-package graphql-mode
-  :ensure t
   :mode "\\.gql$")
 
 (use-package web-mode

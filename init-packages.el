@@ -1,4 +1,6 @@
-;; Code:
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 
 (use-package general
   :config
@@ -143,11 +145,15 @@ _b_   _f_   _q_quit     _y_ank
   )
 
 
-(use-package flyspell-correct-ivy
-  :after flyspell
-  :bind (:map flyspell-mode-map
-        ("C-;" . flyspell-correct-word-generic))
-  :custom (flyspell-correct-interface 'flyspell-correct-ivy))
+;; (use-package flyspell-correct-ivy
+;;   :after flyspell
+;;   :bind (:map flyspell-mode-map
+;;         ("C-c ;" . flyspell-correct-word-generic))
+;;   :custom (flyspell-correct-interface 'flyspell-correct-ivy))
+
+;; aggresively disable flyspell by redifining the function
+(eval-after-load "flyspell"
+  '(defun flyspell-mode (&optional arg)))
 
 (use-package ace-window
   :config
@@ -349,7 +355,10 @@ _b_   _f_   _q_quit     _y_ank
   (general-define-key
    :prefix "C-x"
    "n" 'neotree-toggle)
-  (setq-default neo-show-hidden-files t))
+
+  (setq neo-hidden-regexp-list '("^\\.flycheck" "~$" "^#.*#$" "\\.elc$" "\\.o$"))
+  (setq-default neo-show-hidden-files nil)
+  (setq neo-theme (if (display-graphic-p) 'icons 'arrow)))
 
 (use-package all-the-icons)
 
@@ -390,5 +399,9 @@ _b_   _f_   _q_quit     _y_ank
   :config
   (add-hook 'after-init-hook #'global-emojify-mode)
   (emojify-download-emoji-maybe))
+
+(use-package all-the-icons)
+
+(use-package vterm)
 (provide 'init-packages)
 ;;; init-packages.el ends here

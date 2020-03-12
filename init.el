@@ -1,3 +1,6 @@
+;;; package --- Summary
+;;; Commentary:
+;;; Code:
 
 ;;
 ;; Bootstrap package management
@@ -87,6 +90,10 @@
 
 ;; prefer spaces over tabs
 (setq-default indent-tabs-mode nil)
+
+;; reload TAGS file automatically
+;; stops that annoying popup dialogue box
+(setq tags-revert-without-query 1)
 
 ;; typed text replaces selected
 (delete-selection-mode 1)
@@ -201,6 +208,9 @@
 ;; toggle wrapping text at the 80th character
 (setq default-fill-column 80)
 
+;; quick fix to get around the exceeding max-lisp-eval-depth errors
+(setq max-lisp-eval-depth 10000)
+
 (dolist (hook '(text-mode-hook))
   (add-hook hook (lambda ()
                    (flyspell-mode 1)
@@ -217,6 +227,8 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
+(exec-path-from-shell-copy-envs '("NPM_TOKEN"))
+
 ;;
 ;; Load other modules
 ;;
@@ -227,9 +239,13 @@
 (load "~/.emacs.d/init-lisp")
 (load "~/.emacs.d/init-keys.el")
 (load "~/.emacs.d/init-functions")
+(load "~/.emacs.d/init-keys.el")
+;; (load "~/.emacs.d/init-golang.el")
+;; (load "~/.emacs.d/init-programming.el")
 ;; (load "~/.emacs.d/init-javascript.el")
 ;; (load "~/.emacs.d/init-lsp.el")
 ;; (load "~/.emacs.d/init-golang.el")
+;; (load "~/.emacs.d/init-typescript.el")
 
 (use-package spacemacs-theme
  :ensure t
@@ -253,8 +269,6 @@
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 
-
-;; (load-theme 'doom-one t)
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

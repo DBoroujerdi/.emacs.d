@@ -21,3 +21,4 @@ tutorial/
 .mc-lists.el
 eshell/
 emojis/
+.dap-breakpoints
