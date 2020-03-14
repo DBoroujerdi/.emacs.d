@@ -3,15 +3,18 @@
 Based on blog post:
 https://sam217pa.github.io/2016/09/02/how-to-build-your-own-spacemacs/
 
+# Prerequisites
+
+- cmake (for vterm)
+- inconsolata font
+
 ## Setup
 
-Checkout to the standard emacs config location
-
 ```
-git clone git@github.com:DBoroujerdi/.emacs.d.git
+git clone git@github.com:DBoroujerdi/.emacs.d.git ~/.emacs.d
 ```
 
-Or start from an arbitrary location
+Or start from an arbitrary location, for testing
 
 `env HOME=/Users/dbo01/projects/personal emacs -q --load ~/projects/personal/.emacs.d/init.el`
 
