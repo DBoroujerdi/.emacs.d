@@ -8,64 +8,42 @@
 
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
-(require 'package)
+;; Backups
+(setq backup-directory-alist `(("." . ,(concat user-emacs-directory "backups")))
+      vc-make-backup-files t
+      version-control t
+      kept-old-versions 0
+      kept-new-versions 10
+      delete-old-versions t
+      backup-by-copying t)
 
 (setq package-archives
-      (append package-archives
-              '(("melpa" . "http://melpa.milkbox.net/packages/"))))
+      '(("melpa" . "https://melpa.org/packages/")
+        ("elpa" . "https://elpa.gnu.org/packages/")
+        ("nongnu" . "https://elpa.nongnu.org/nongnu/")))
+
+;;
+;; Bootstrap package management
+;;
+
+(unless (package-installed-p 'quelpa)
+  (with-temp-buffer
+    (url-insert-file-contents "https://raw.githubusercontent.com/quelpa/quelpa/master/quelpa.el")
+    (eval-buffer)
+    (quelpa-self-upgrade)))
 
 (package-initialize)
-(setq package-enable-at-startup nil)(require 'package)
-(add-to-list 'package-archives
-             '("melpa-stable" . "https://stable.melpa.org/packages/"))
 
+(quelpa
+ '(quelpa-use-package
+   :fetcher git
+   :url "https://github.com/quelpa/quelpa-use-package.git"))
+(require 'quelpa-use-package)
 
-;; If never connected to repositories before, download package descriptions so
-;; `use-package' can trigger installation of missing packages.
-(unless package-archive-contents
-  (message "Refreshing ELPA package archives...")
-  (package-refresh-contents))
+(setq use-package-ensure-function 'quelpa)
 
-
-;; straight - for checking out packages with git, for local hacking and contributing
-(defvar bootstrap-version)
-(let ((bootstrap-file
-       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
-      (bootstrap-version 5))
-  (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
-      (goto-char (point-max))
-      (eval-print-last-sexp)))
-    (load bootstrap-file nil 'nomessage))
-
-
-;; Install `use-package`
-;; This can be done 1 of 3 ways
-
-;; 1. Simple way - from `package-install`
-(unless (package-installed-p 'use-package)
-  (message "`use-package' not found.  Installing...")
-  (package-install 'use-package))
-
-;; so we don't have to add :ensure t to every use-package invocation
-(setq use-package-always-ensure t)
-
-;; 2. Git-submodule - when you want to install a specific commit hash, maybe
-;; due to a bug
-;; (eval-when-compile
-;;   ;; Following line is not needed if use-package.el is in ~/.emacs.d
-;;   (add-to-list 'load-path (concat user-emacs-directory (convert-standard-filename "vendor/use-package"))))
-
-;; 3. With straight - you can then use straight flags in `use-package` commands
-;; (straight-use-package 'use-package)
-
-;; finally, load use-package
-(require 'use-package)
-(setq use-package-minimum-reported-time 0
-      use-package-verbose t)
+;; Keep custom-set-variables and friends out of my init.el
+(setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
 ;;
 ;; End of package management bootstrap
@@ -75,7 +53,6 @@
 	 ((lambda ()
 	    (getenv
 	     (if (equal system-type 'windows-nt) "USERNAME" "USER")))))
-
 
 ;;
 ;; Config
@@ -229,19 +206,17 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-(exec-path-from-shell-copy-envs '("NPM_TOKEN"))
-
 ;;
 ;; Load other modules
 ;;
 
 ;; todo
 ;; user-emacs-directory
-(load "~/.emacs.d/init-packages")
-(load "~/.emacs.d/init-lisp")
-(load "~/.emacs.d/init-keys.el")
-(load "~/.emacs.d/init-functions")
-(load "~/.emacs.d/init-keys.el")
+;; (load "~/.emacs.d/init-packages")
+;; (load "~/.emacs.d/init-lisp")
+;; (load "~/.emacs.d/init-keys.el")
+;; (load "~/.emacs.d/init-functions")
+;; (load "~/.emacs.d/init-keys.el")
 ;; (load "~/.emacs.d/init-golang.el")
 ;; (load "~/.emacs.d/init-programming.el")
 ;; (load "~/.emacs.d/init-javascript.el")
@@ -249,40 +224,78 @@
 ;; (load "~/.emacs.d/init-golang.el")
 ;; (load "~/.emacs.d/init-typescript.el")
 
-(use-package spacemacs-theme
- :ensure t
- :defer t)
-
-(load-theme 'spacemacs-light 'no-confirm)
-
 ;; for new frames and emacs client..
 ;; (setq default-frame-alist ((font . "Inconsolata")))
 
 ;; set default font
 (set-face-attribute 'default nil
-                     :family "Inconsolata"
+                     :family "SFMono Nerd Font"
                      :height 140
                      :weight 'normal
                      :width 'normal)
 
 ;; set modeline font
-(set-face-attribute 'mode-line nil :family "Inconsolata")
+(set-face-attribute 'mode-line nil :family "SFMono Nerd Font")
 
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "4a61dd8fd1fd94f118e43314abbd86873868a12c5f5d73de9f8558d0d2b33c46" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f0dc4ddca147f3c7b1c7397141b888562a48d9888f1595d69572db73be99a024" default)))
- '(exec-path-from-shell-check-startup-files nil))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+;;
+;; Packages
+;;
+
+(defconst leader-key "SPC")
+
+(setq evil-want-keybinding nil)
+
+(use-package evil
+  :ensure t
+  :init
+   (progn
+      (setq evil-undo-system 'undo-tree)
+      (setq evil-want-keybinding nil))
+  :config
+  (evil-mode 1))
+
+;; (use-package undo-tree :ensure t)
+
+(use-package evil-collection
+  :after evil
+  :ensure t
+  :config
+  (evil-collection-init))
+
+(use-package general
+  :ensure t
+  :config
+  (general-create-definer general-leader-def
+    :prefix leader-key))
+
+(use-package projectile
+  :ensure t
+  :config
+  (progn
+    (projectile-mode +1)
+    (general-leader-def
+      :keymaps 'normal
+      "p p" 'projectile-commander
+    )))
+
+(use-package vertico
+  :quelpa (vertico :fetcher github :repo "minad/vertico")
+  :init
+  (vertico-mode))
+
+(use-package savehist
+  :init
+  (savehist-mode))
+
+(use-package magit
+  :ensure t
+  :config
+  (general-leader-def
+   :keymaps 'normal
+   "m s" 'magit-status
+   "m l" 'magit-log))
+
+(load "~/.emacs.d/init-functions.el")
