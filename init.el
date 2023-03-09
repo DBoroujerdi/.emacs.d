@@ -34,10 +34,15 @@
 
 (package-initialize)
 
+;; If never connected to repositories before, download package descriptions so
+;; `use-package' can trigger installation of missing packages.
+(when (not package-archive-contents)
+    (package-refresh-contents))
 (quelpa
  '(quelpa-use-package
    :fetcher git
    :url "https://github.com/quelpa/quelpa-use-package.git"))
+
 (require 'quelpa-use-package)
 
 (setq use-package-ensure-function 'quelpa)
