@@ -262,7 +262,13 @@
   :config
   (evil-mode 1))
 
-;; (use-package undo-tree :ensure t)
+(use-package undo-tree
+  :quelpa (undo-tree :fetcher gitlab :repo "tsc25/undo-tree")
+  :init
+  (undo-tree-mode)
+  :config
+  (general-def 'normal
+    "U" 'undo-tree-visualize))
 
 (use-package evil-collection
   :after evil
@@ -281,8 +287,7 @@
   :config
   (progn
     (projectile-mode +1)
-    (general-leader-def
-      :keymaps 'normal
+    (general-leader-def 'normal 'override
       "p p" 'projectile-commander
     )))
 
@@ -298,8 +303,7 @@
 (use-package magit
   :ensure t
   :config
-  (general-leader-def
-   :keymaps 'normal
+  (general-leader-def 'normal 'override
    "m s" 'magit-status
    "m l" 'magit-log))
 
