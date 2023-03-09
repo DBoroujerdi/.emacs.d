@@ -211,24 +211,6 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-;;
-;; Load other modules
-;;
-
-;; todo
-;; user-emacs-directory
-;; (load "~/.emacs.d/init-packages")
-;; (load "~/.emacs.d/init-lisp")
-;; (load "~/.emacs.d/init-keys.el")
-;; (load "~/.emacs.d/init-functions")
-;; (load "~/.emacs.d/init-keys.el")
-;; (load "~/.emacs.d/init-golang.el")
-;; (load "~/.emacs.d/init-programming.el")
-;; (load "~/.emacs.d/init-javascript.el")
-;; (load "~/.emacs.d/init-lsp.el")
-;; (load "~/.emacs.d/init-golang.el")
-;; (load "~/.emacs.d/init-typescript.el")
-
 ;; for new frames and emacs client..
 ;; (setq default-frame-alist ((font . "Inconsolata")))
 
