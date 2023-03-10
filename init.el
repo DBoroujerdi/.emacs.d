@@ -184,15 +184,7 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-;; for new frames and emacs client..
-;; (setq default-frame-alist ((font . "Inconsolata")))
-
-;; set default font
-(set-face-attribute 'default nil
-                     :family "SFMono Nerd Font"
-                     :height 140
-                     :weight 'normal
-                     :width 'normal)
+(set-frame-font "SFMono Nerd Font" nil t)
 
 ;; set modeline font
 (set-face-attribute 'mode-line nil :family "SFMono Nerd Font")
