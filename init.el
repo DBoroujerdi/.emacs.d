@@ -121,29 +121,7 @@
 ;; (setq linum-format "%d ")
 ;; (global-linum-mode t)
 
-(if (display-graphic-p)
-    (progn
-      (setq initial-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 200) ; chars
-              (height . 60) ; lines
-              ))
-
-      (setq default-frame-alist
-            '(
-              (tool-bar-lines . 0)
-              (width . 200)
-              (height . 60)
-              )))
-  (progn
-    (setq initial-frame-alist
-          '(
-            (tool-bar-lines . 0)))
-    (setq default-frame-alist
-          '(
-            (tool-bar-lines . 0)))))
-
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; limit the number of times a frame can split
 (setq split-width-threshold 200)
