@@ -271,8 +271,15 @@
 (use-package magit
   :ensure t
   :config
+  (general-def 'normal "C-r" 'magit-refresh)
   (general-leader-def 'normal 'override
    "m s" 'magit-status
    "m l" 'magit-log))
+
+(use-package magit-todos
+  :after magit
+  :ensure t
+  :init
+  (magit-todos-mode))
 
 (load "~/.emacs.d/init-functions.el")
