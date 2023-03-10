@@ -117,17 +117,12 @@
 ;; buffer line spacing
 (setq-default line-spacing 5)
 
-;; display line numbers
-;; (setq linum-format "%d ")
-;; (global-linum-mode t)
-
+;; go full screen on start
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; limit the number of times a frame can split
 (setq split-width-threshold 200)
 (setq split-height-threshold 120)
-
-(setq c-default-style "linux" c-basic-offset 8)
 
 (setq delete-old-versions -1)
 
@@ -204,6 +199,15 @@
 
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
+
+;; Auto-refresh dired on file change
+(add-hook 'dired-mode-hook 'auto-revert-mode)
+
+(setq display-line-numbers 'relative)
+
+(global-goto-address-mode)
+(global-display-line-numbers-mode)
+
 
 ;;
 ;; Packages
