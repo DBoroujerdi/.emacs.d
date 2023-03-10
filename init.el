@@ -239,8 +239,16 @@
 (use-package general
   :ensure t
   :config
+  (general-evil-setup)
+
   (general-create-definer general-leader-def
-    :prefix leader-key))
+    :prefix leader-key)
+
+  (general-mmap "C-h" 'windmove-left)
+  (general-mmap "C-l" 'windmove-right)
+  (general-mmap "C-j" 'windmove-down)
+  (general-mmap "C-k" 'windmove-up)
+  )
 
 (use-package projectile
   :ensure t
