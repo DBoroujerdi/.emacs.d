@@ -2,6 +2,13 @@
 ;;; Commentary:
 ;;; Code:
 
+(defun reload-emacs-config ()
+  (interactive)
+  (load "~/.emacs.d/init.el"))
+
+(general-def 'normal
+  "SPC r r" 'reload-emacs-config)
+
 (defun json-flatten-print ()
   (interactive)
   (unless mark-active
