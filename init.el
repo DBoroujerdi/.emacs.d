@@ -225,7 +225,7 @@
 (use-package undo-tree
   :quelpa (undo-tree :fetcher gitlab :repo "tsc25/undo-tree")
   :init
-  (undo-tree-mode)
+  (global-undo-tree-mode)
   :config
   (general-def 'normal
     "U" 'undo-tree-visualize))
