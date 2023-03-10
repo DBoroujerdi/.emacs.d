@@ -302,3 +302,35 @@
     "s p" 'fzf-projectile
     "s g" 'fzf-git-grep))
 
+
+;;
+;; LSP
+;;
+
+(use-package eglot)
+
+(use-package typescript-mode
+  :ensure t
+  :after eglot
+  :init
+  (setq eglot-autoshutdown t)
+  :config
+  (add-to-list 'eglot-server-programs
+               '((typescript-mode) "typescript-language-server" "--stdio")))
+
+(use-package company
+  :ensure t
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
+
+(use-package spotlight
+  :ensure t)
+
+(use-package prettier-js
+  :after typescript-mode
+  :ensure t
+  :config
+  (add-hook 'typescript-mode-hook 'prettier-js-mode)
+  (add-hook 'json-ts-mode 'pretter-js-mode))
+
+(server-start)
