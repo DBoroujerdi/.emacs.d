@@ -232,7 +232,8 @@
   (global-undo-tree-mode)
   :config
   (general-def 'normal
-    "U" 'undo-tree-visualize))
+    "U" 'undo-tree-visualize)
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d./.cache"))))
 
 (use-package evil-collection
   :after evil
