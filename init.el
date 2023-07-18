@@ -195,7 +195,7 @@
 ;; Auto-refresh dired on file change
 (add-hook 'dired-mode-hook 'auto-revert-mode)
 
-(setq display-line-numbers 'relative)
+(setq display-line-numbers-type 'relative)
 
 (global-goto-address-mode)
 (global-display-line-numbers-mode)
