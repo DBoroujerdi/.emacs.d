@@ -49,6 +49,8 @@
 
 ;; Keep custom-set-variables and friends out of my init.el
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
+;; don't show errors in custom file
+(load custom-file 'noerror 'nomessage)
 
 ;;
 ;; End of package management bootstrap
@@ -93,7 +95,7 @@
 
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Disable toolbar
+;; disable toolbar
 (tool-bar-mode -1)
 
 ;; solid cursor
@@ -184,11 +186,6 @@
 (when (memq window-system '(mac ns x))
   (exec-path-from-shell-initialize))
 
-(set-frame-font "SFMono Nerd Font" nil t)
-
-;; set modeline font
-(set-face-attribute 'mode-line nil :family "SFMono Nerd Font")
-
 (set-language-environment "UTF-8")
 (set-default-coding-systems 'utf-8)
 
@@ -200,6 +197,55 @@
 (global-goto-address-mode)
 (global-display-line-numbers-mode)
 
+;; Remeber minibufer history
+;; cycle through history with M-p and M-n when in minibuffer
+(setq history-length 25)
+(savehist-mode 1)
+
+;; Recent files
+(recentf-mode 1)
+
+;; Save place between sessions
+(save-place-mode 1)
+
+;; don't use graphical dialogs
+(setq use-dialog-box nil)
+
+(setq epg-gpg-program "gpg")
+
+;; Treesitter
+
+;; language grammars
+(setq treesit-language-source-alist
+   '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+     (cmake "https://github.com/uyha/tree-sitter-cmake")
+     (css "https://github.com/tree-sitter/tree-sitter-css")
+     (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+     (go "https://github.com/tree-sitter/tree-sitter-go")
+     (html "https://github.com/tree-sitter/tree-sitter-html")
+     (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+     (json "https://github.com/tree-sitter/tree-sitter-json")
+     (make "https://github.com/alemuller/tree-sitter-make")
+     (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+     (python "https://github.com/tree-sitter/tree-sitter-python")
+     (toml "https://github.com/tree-sitter/tree-sitter-toml")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+     (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+     (yaml "https://github.com/ikatyang/tree-sitter-yaml")
+     (hcl "https://github.com/mitchellh/tree-sitter-hcl.git")
+     (tsx "https://github.com/tree-sitter/tree-sitter-typescript.git" "master" "typescript/src")))
+
+;; remap major modes to treesitter
+
+(setq major-mode-remap-alist
+ '((yaml-mode . yaml-ts-mode)
+   (bash-mode . bash-ts-mode)
+   (js2-mode . js-ts-mode)
+   (typescript-mode . typescript-ts-mode)
+   (json-mode . json-ts-mode)
+   (css-mode . css-ts-mode)
+   (python-mode . python-ts-mode)
+   (terraform-mode . hcl-ts-mode)))
 
 ;;
 ;; Packages
@@ -218,8 +264,12 @@
   :config
   (evil-mode 1))
 
+(use-package eldoc
+  :diminish eldoc-mode)
+
 (use-package undo-tree
   :quelpa (undo-tree :fetcher gitlab :repo "tsc25/undo-tree")
+  :diminish undo-tree-mode
   :init
   (global-undo-tree-mode)
   :config
@@ -229,6 +279,7 @@
 
 (use-package evil-collection
   :after evil
+  :diminish evil-collection-unimpaired-mode
   :ensure t
   :config
   (evil-collection-init))
@@ -244,34 +295,100 @@
   (general-mmap "C-h" 'windmove-left)
   (general-mmap "C-l" 'windmove-right)
   (general-mmap "C-j" 'windmove-down)
-  (general-mmap "C-k" 'windmove-up)
-  )
+  (general-mmap "C-k" 'windmove-up))
+
+(use-package smartparens
+  :ensure t
+  :diminish smartparens-mode
+  :config
+  (progn
+    (require 'smartparens-config)
+    (smartparens-global-mode t)))
+
+(use-package vertico-prescient
+  :ensure t
+  :after vertico prescient)
+
+(use-package prescient
+  :ensure t
+  :after vertico
+  :config (progn
+            (prescient-persist-mode +1)
+            (vertico-prescient-mode)))
 
 (use-package projectile
   :ensure t
+  :diminish projectile-mode
   :config
   (progn
     (projectile-mode +1)
     (general-leader-def 'normal 'override
       "p p" 'projectile-commander
-    )))
+      "p f" 'projectile-find-file
+      "p g" 'projectile-grep
+      "p v" 'projectile-run-vterm)))
+
+(use-package which-key
+  :ensure t
+  :diminish which-key-mode
+  :config
+  (progn
+    (which-key-setup-side-window-bottom))
+  :init
+  (which-key-mode))
+
+(use-package copilot
+  :quelpa (copilot :fetcher github
+                   :repo "zerolfx/copilot.el"
+                   :branch "main"
+                   :files ("dist" "*.el"))
+  :hook (prog-mode . copilot-mode)
+  :config (progn
+            (define-key copilot-completion-map (kbd "<tab>") 'copilot-accept-completion)
+            (define-key copilot-completion-map (kbd "TAB") 'copilot-accept-completion)
+            (define-key copilot-completion-map (kbd "M-]") 'copilot-next-completion)
+            (define-key copilot-completion-map (kbd "M-[") 'copilot-previous-completion)))
+
+(use-package prog-mode
+  :config (progn
+            (add-hook 'prog-mode-hook (lambda ()
+(require 'grep)
+     (setq-local grep-find-ignored-directories
+                 (cons "node_modules" (default-value 'grep-find-ignored-directories)))
+     ))))
+
+(use-package treemacs
+  :ensure t
+  :config
+  (setq treemacs-is-never-other-window t)
+
+  (general-leader-def 'normal 'override
+    "t t" 'treemacs
+    "t s" 'treemacs-select-window))
+
+(use-package treemacs-projectile
+  :ensure t
+  :after treemacs projectile)
+
+(require 'project)
 
 (use-package vertico
-  :quelpa (vertico :fetcher github :repo "minad/vertico")
-  :init
-  (vertico-mode))
-
-(use-package savehist
-  :init
-  (savehist-mode))
+  :ensure t
+  :quelpa (vertico :fetcher github
+                   :repo "minad/vertico"
+                   :branch "main"
+                   :files ("*.el" "extensions/*.el"))
+  :init (vertico-mode)
+  )
 
 (use-package magit
   :ensure t
   :config
   (general-def 'normal "C-r" 'magit-refresh)
   (general-leader-def 'normal 'override
-   "m s" 'magit-status
-   "m l" 'magit-log))
+   "g g" 'magit-status
+   "g s" 'magit-status
+   "g l" 'magit-log))
 
 (use-package magit-todos
   :after magit
@@ -279,7 +396,6 @@
   :init
   (magit-todos-mode))
 
-(load "~/.emacs.d/init-functions.el")
 
 (use-package fzf
   :ensure t
@@ -299,6 +415,25 @@
     "s p" 'fzf-projectile
     "s g" 'fzf-git-grep))
 
+(use-package terraform-mode
+  :ensure t
+  :init (progn
+          (setq terraform-format-on-save 't)
+  :config (progn
+            (with-eval-after-load 'eglot
+              (add-to-list 'eglot-server-programs
+                           '(terraform-mode . ("terraform-ls" "serve"))))
+            (add-hook 'terraform-mode-hook #'eglot-ensure))))
+
+
+;; not working..
+(use-package vterm
+  :ensure t
+  :config (progn
+            (print "vterm config")
+            (add-hook 'vterm-mode-hook (lambda ()
+                                         (print "vterm hook 2")
+                                         (setq-local display-line-numbers-mode nil)))))
 
 ;;
 ;; LSP
@@ -317,6 +452,7 @@
 
 (use-package company
   :ensure t
+  :diminish company-mode
   :config
   (add-hook 'after-init-hook 'global-company-mode))
 
@@ -326,8 +462,58 @@
 (use-package prettier-js
   :after typescript-mode
   :ensure t
+  :hook (typescript-mode . prettier-js-mode)
+  :hook (json-ts-mode . prettier-js-mode))
+
+(use-package diminish
+  :ensure t)
+
+(use-package tree-sitter
+  :ensure t
   :config
-  (add-hook 'typescript-mode-hook 'prettier-js-mode)
-  (add-hook 'json-ts-mode 'pretter-js-mode))
+  :after tree-sitter-langs
+  (progn
+    (require 'tree-sitter-langs)
+    (global-tree-sitter-mode)
+    (add-hook 'tree-sitter-after-on-hook #'tree-sitter-hl-mode)))
+
+(use-package tree-sitter-langs
+  :ensure t)
+
+(use-package yaml-mode
+  :ensure t)
+
+(use-package doom-themes
+  :ensure t
+  :after all-the-icons
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
+
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-atom") ; use "doom-colors" for less minimal icon theme
+  (doom-themes-treemacs-config)
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+
+;;(set-frame-font "SFMono" nil t)
+
+
+(use-package all-the-icons
+  :ensure t
+  :if (display-graphic-p))
+
+;; set modeline font
+;;(set-face-attribute 'mode-line nil :family "SFMono")
+
+(load "~/.emacs.d/init-functions.el")
+(load "~/.emacs.d/init-keys.el")
 
 (server-start)
+(put 'dired-find-alternate-file 'disabled nil)

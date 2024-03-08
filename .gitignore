@@ -25,3 +25,10 @@ emojis/
 history
 eln-cache
 *merge*
+.cache
+projects
+\\
+forge*
+tree-sitter
+var
+places
